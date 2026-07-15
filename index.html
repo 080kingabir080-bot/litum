@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<title>LITUM AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+<style>
+/* ─── RESET ─────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+:root{
+  --p:        #7C3AED;
+  --p2:       #6D28D9;
+  --p3:       #5B21B6;
+  --teal:     #0ABDB6;
+  --sky:      #38BDF8;
+  --green:    #22C55E;
+  --amber:    #F59E0B;
+  --amber2:   #D97706;
+  --red:      #EF4444;
+  --text:     #1A1A2E;
+  --text2:    #6B7280;
+  --muted:    #9CA3AF;
+  --bg:       #EEF1F7;
+  --white:    #FFFFFF;
+  --glass:    rgba(255,255,255,0.82);
+  --radius:   22px;
+  --hh:       70px; /* header height */
+  --safe:     env(safe-area-inset-bottom,0px);
+}
+
+html,body{height:100%;width:100%;overflow:hidden;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;
+  background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased}
+
+/* ─── APP SHELL ──────────────────────────────────────── */
+#app{
+  display:flex;flex-direction:column;
+  height:100dvh;width:100%;max-width:480px;
+  margin:0 auto;position:relative;overflow:hidden;
+  background:var(--bg)
+}
+
+/* ─── ANIMATED BACKGROUND ────────────────────────────── */
+.core-bg{
+  position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  background:linear-gradient(155deg,#F0F4FF 0%,#E8F3FD 30%,#EEF0FF 60%,#F5F0FF 100%)
+}
+.orb{position:absolute;border-radius:50%;filter:blur(55px);opacity:0;
+  animation:orbF linear infinite;will-change:transform,opacity}
+.o1{width:260px;height:260px;top:-50px;right:-70px;
+  background:radial-gradient(circle,rgba(124,58,237,.17) 0%,transparent 70%);
+  animation-duration:13s;animation-delay:0s}
+.o2{width:200px;height:200px;top:35%;left:-50px;
+  background:radial-gradient(circle,rgba(10,189,182,.14) 0%,transparent 70%);
+  animation-duration:17s;animation-delay:-5s}
+.o3{width:280px;height:280px;bottom:22%;right:-70px;
+  background:radial-gradient(circle,rgba(56,189,248,.11) 0%,transparent 70%);
+  animation-duration:15s;animation-delay:-9s}
+.o4{width:170px;height:170px;bottom:-30px;left:22%;
+  background:radial-gradient(circle,rgba(245,158,11,.09) 0%,transparent 70%);
+  animation-duration:19s;animation-delay:-3s}
+@keyframes orbF{
+  0%{opacity:0;transform:translate(0,18px) scale(.95)}
+  15%{opacity:1}50%{transform:translate(10px,-10px) scale(1.04)}
+  85%{opacity:1}100%{opacity:0;transform:translate(-7px,16px) scale(.97)}
+}
+.cring{position:absolute;border-radius:50%;border:1px solid;
+  animation:ringP ease-out infinite;pointer-events:none}
+.cr1{width:110px;height:110px;top:20%;right:8%;
+  border-color:rgba(124,58,237,.11);animation-duration:4.5s}
+.cr2{width:72px;height:72px;top:20%;right:8%;
+  border-color:rgba(124,58,237,.19);animation-duration:4.5s;animation-delay:.7s}
+.cr3{width:150px;height:150px;top:20%;right:8%;
+  border-color:rgba(124,58,237,.06);animation-duration:4.5s;animation-delay:1.4s}
+@keyframes ringP{
+  0%{transform:translate(50%,-50%) scale(.6);opacity:.8}
+  100%{transform:translate(50%,-50%) scale(2.4);opacity:0}
+}
+.part{position:absolute;width:2.5px;height:2.5px;border-radius:50%;opacity:0;
+  animation:partD linear infinite;pointer-events:none}
+@keyframes partD{
+  0%{transform:translateY(0) translateX(0);opacity:0}
+  20%{opacity:.5}80%{opacity:.35}
+  100%{transform:translateY(-110px) translateX(18px);opacity:0}
+}
+
+/* ─── HEADER ─────────────────────────────────────────── */
+#header{
+  position:relative;z-index:100;height:var(--hh);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 14px;
+  background:rgba(255,255,255,.84);
+  backdrop-filter:blur(24px) saturate(1.8);
+  -webkit-backdrop-filter:blur(24px) saturate(1.8);
+  border-bottom:1px solid rgba(255,255,255,.55);
+  box-shadow:0 1px 0 rgba(0,0,0,.04),0 4px 18px rgba(0,0,0,.05)
+}
+.h-left,.h-right{display:flex;align-items:center;gap:8px}
+.h-center{display:flex;flex-direction:column;align-items:center;flex:1}
+
+/* Core button */
+.btn-core{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(124,58,237,.08);
+  border:1.5px solid rgba(124,58,237,.18);
+  border-radius:50px;padding:6px 12px 6px 8px;
+  cursor:pointer;transition:all .2s cubic-bezier(.34,1.56,.64,1)
+}
+.btn-core:active{transform:scale(.93);background:rgba(124,58,237,.14)}
+.btn-core-label{font-size:11px;font-weight:600;color:var(--p);letter-spacing:.3px}
+.core-badge{
+  width:26px;height:26px;border-radius:7px;
+  background:linear-gradient(135deg,var(--p),var(--teal));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(124,58,237,.3);
+  animation:corePulse 3s ease-in-out infinite
+}
+@keyframes corePulse{
+  0%,100%{box-shadow:0 2px 8px rgba(124,58,237,.3)}
+  50%{box-shadow:0 2px 18px rgba(124,58,237,.55),0 0 22px rgba(10,189,182,.2)}
+}
+
+/* Title */
+.h-title{
+  font-size:21px;font-weight:800;letter-spacing:-.5px;
+  background:linear-gradient(135deg,#7C3AED 0%,#5B21B6 55%,#0ABDB6 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+}
+.h-status{display:flex;align-items:center;gap:5px;margin-top:2px}
+.sdot{
+  width:7px;height:7px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 0 2px rgba(34,197,94,.25);
+  animation:sdotP 2.4s ease-in-out infinite
+}
+@keyframes sdotP{
+  0%,100%{box-shadow:0 0 0 2px rgba(34,197,94,.25)}
+  50%{box-shadow:0 0 0 4px rgba(34,197,94,.1),0 0 8px rgba(34,197,94,.4)}
+}
+.stext{font-size:10px;font-weight:500;color:var(--text2);letter-spacing:.1px}
+
+/* Mode badge in header */
+.mode-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 8px;border-radius:20px;
+  font-size:10px;font-weight:700;letter-spacing:.4px;
+  transition:all .3s ease
+}
+.mode-badge.learn{background:rgba(245,158,11,.12);color:var(--amber2);border:1px solid rgba(245,158,11,.25)}
+.mode-badge.use{background:rgba(34,197,94,.10);color:#15803D;border:1px solid rgba(34,197,94,.2)}
+
+/* Icon buttons */
+.ibtn{
+  width:36px;height:36px;border:none;background:transparent;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  border-radius:10px;transition:all .2s ease;color:var(--p);position:relative
+}
+.ibtn:active{background:rgba(124,58,237,.08);transform:scale(.9)}
+.ibtn svg{width:19px;height:19px;fill:none;stroke:currentColor;
+  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* Mode toggle */
+.mode-toggle{
+  display:flex;align-items:center;gap:0;
+  background:rgba(0,0,0,.05);border-radius:10px;padding:3px;overflow:hidden
+}
+.mtab{
+  padding:5px 10px;border-radius:7px;border:none;background:transparent;
+  font-size:10.5px;font-weight:600;cursor:pointer;
+  transition:all .22s cubic-bezier(.34,1.56,.64,1);
+  color:var(--text2);white-space:nowrap
+}
+.mtab.active-learn{background:var(--amber);color:#fff;
+  box-shadow:0 2px 8px rgba(245,158,11,.35)}
+.mtab.active-use{background:var(--p);color:#fff;
+  box-shadow:0 2px 8px rgba(124,58,237,.35)}
+
+/* Accent line */
+.h-bar{
+  position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(124,58,237,.4) 20%,
+    rgba(10,189,182,.5) 50%,rgba(56,189,248,.4) 80%,transparent)
+}
+
+/* ─── SLIDE MENU ─────────────────────────────────────── */
+#slide-menu{
+  position:absolute;top:var(--hh);left:0;right:0;z-index:90;
+  background:rgba(255,255,255,.97);
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  border-bottom:1px solid rgba(0,0,0,.06);
+  box-shadow:0 16px 40px rgba(0,0,0,.10);
+  transform:translateY(-105%);opacity:0;
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .25s ease;
+  pointer-events:none
+}
+#slide-menu.open{transform:translateY(0);opacity:1;pointer-events:all}
+.mlist{list-style:none;padding:10px 0}
+.mitem{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 22px;cursor:pointer;transition:background .15s ease
+}
+.mitem:active{background:rgba(124,58,237,.05)}
+.micon{
+  width:34px;height:34px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center
+}
+.micon svg{width:17px;height:17px;fill:none;stroke:currentColor;
+  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mtxt{font-size:14.5px;font-weight:500;color:var(--text)}
+.msub{font-size:11.5px;color:var(--muted);margin-top:1px}
+.mdiv{height:1px;background:rgba(0,0,0,.055);margin:5px 18px}
+
+/* ─── MAIN CONTENT AREA ─────────────────────────────── */
+#content{
+  flex:1;display:flex;flex-direction:column;
+  position:relative;z-index:10;overflow:hidden
+}
+
+/* ─── CHAT AREA ──────────────────────────────────────── */
+#chat-area{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+  padding:18px 14px 10px;
+  display:flex;flex-direction:column;gap:11px
+}
+#chat-area::-webkit-scrollbar{display:none}
+#chat-area{scrollbar-width:none}
+
+/* Date line */
+.date-sep{
+  display:flex;align-items:center;gap:8px;margin:2px 0 6px
+}
+.date-sep::before,.date-sep::after{
+  content:'';flex:1;height:1px;background:rgba(0,0,0,.07)
+}
+.date-sep span{font-size:10.5px;color:var(--muted);font-weight:500;white-space:nowrap}
+
+/* ─── MESSAGES ───────────────────────────────────────── */
+.mrow{
+  display:flex;align-items:flex-end;gap:7px;
+  animation:msgIn .38s cubic-bezier(.34,1.56,.64,1) both
+}
+@keyframes msgIn{
+  from{opacity:0;transform:translateY(16px) scale(.95)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.mrow.ai{flex-direction:row;justify-content:flex-start}
+.mrow.user{flex-direction:row-reverse}
+.mrow.system-learn{flex-direction:row;justify-content:flex-start}
+
+.mavatar{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--p),var(--teal));
+  box-shadow:0 2px 8px rgba(124,58,237,.22);margin-bottom:2px
+}
+.mavatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.mavatar svg{width:14px;height:14px;fill:none;stroke:#fff;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.user .mavatar{background:linear-gradient(135deg,var(--p),var(--p3))}
+
+.bubble{
+  max-width:78%;padding:11px 15px 7px;
+  border-radius:var(--radius);position:relative;
+  word-break:break-word;transition:transform .18s ease
+}
+.bubble:active{transform:scale(.98)}
+
+.ai .bubble{
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(18px) saturate(1.5);
+  -webkit-backdrop-filter:blur(18px) saturate(1.5);
+  border:1px solid rgba(255,255,255,.75);
+  box-shadow:0 2px 12px rgba(0,0,0,.07),0 6px 28px rgba(124,58,237,.06),
+    inset 0 1px 0 rgba(255,255,255,.9);
+  border-radius:20px 20px 20px 5px
+}
+.user .bubble{
+  background:linear-gradient(135deg,var(--p) 0%,var(--p2) 60%,var(--p3) 100%);
+  border:1px solid rgba(124,58,237,.25);
+  box-shadow:0 4px 16px rgba(124,58,237,.28),0 2px 6px rgba(0,0,0,.1),
+    inset 0 1px 0 rgba(255,255,255,.14);
+  border-radius:20px 20px 5px 20px
+}
+
+/* Learn confirmation bubble — amber accent */
+.learn-confirm .bubble{
+  background:rgba(255,251,235,.95);
+  border:1px solid rgba(245,158,11,.25);
+  box-shadow:0 2px 12px rgba(245,158,11,.12);
+  border-radius:20px 20px 20px 5px
+}
+
+.btext{
+  font-size:15px;line-height:1.56;font-weight:400;
+  direction:rtl;text-align:right;letter-spacing:.1px
+}
+.ai .btext,.learn-confirm .btext{color:var(--text)}
+.user .btext{color:#fff}
+
+.btime{
+  font-size:9.5px;font-weight:500;margin-top:4px;
+  direction:ltr;display:flex;align-items:center;gap:4px;
+  letter-spacing:.3px
+}
+.ai .btime,.learn-confirm .btime{color:var(--muted)}
+.user .btime{color:rgba(255,255,255,.5);justify-content:flex-end}
+
+.tdot{width:3.5px;height:3.5px;border-radius:50%;display:inline-block;flex-shrink:0}
+.ai .tdot{background:rgba(124,58,237,.28)}
+.user .tdot{background:rgba(255,255,255,.38)}
+.learn-confirm .tdot{background:rgba(245,158,11,.4)}
+
+/* Confirmed tag */
+.rule-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(245,158,11,.12);color:var(--amber2);
+  border:1px solid rgba(245,158,11,.22);
+  border-radius:20px;padding:2px 8px;
+  font-size:10px;font-weight:700;letter-spacing:.3px;
+  margin-top:5px
+}
+.rule-tag svg{width:10px;height:10px;stroke:currentColor;
+  fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ─── THINKING ───────────────────────────────────────── */
+.thinking-row{
+  display:flex;align-items:flex-end;gap:7px;
+  animation:msgIn .28s ease both
+}
+.thinking-bub{
+  background:rgba(255,255,255,.82);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,.7);
+  box-shadow:0 2px 12px rgba(0,0,0,.07);
+  border-radius:20px 20px 20px 5px;
+  padding:13px 16px;display:flex;align-items:center;gap:5px
+}
+.tdot-ani{
+  width:6.5px;height:6.5px;border-radius:50%;
+  animation:tPop 1.2s ease-in-out infinite
+}
+.tdot-ani:nth-child(1){background:var(--p);animation-delay:0s}
+.tdot-ani:nth-child(2){background:var(--teal);animation-delay:.17s}
+.tdot-ani:nth-child(3){background:var(--sky);animation-delay:.34s}
+@keyframes tPop{
+  0%,60%,100%{transform:translateY(0) scale(1);opacity:.45}
+  30%{transform:translateY(-5px) scale(1.2);opacity:1}
+}
+
+/* ─── LEARN PANEL ────────────────────────────────────── */
+#learn-panel{
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:2px solid rgba(245,158,11,.25);
+  box-shadow:0 -8px 30px rgba(245,158,11,.08);
+  overflow:hidden;
+  max-height:0;transition:max-height .4s cubic-bezier(.4,0,.2,1)
+}
+#learn-panel.open{max-height:280px}
+
+.lp-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px 8px;
+  border-bottom:1px solid rgba(245,158,11,.12)
+}
+.lp-title{
+  display:flex;align-items:center;gap:7px;
+  font-size:12px;font-weight:700;color:var(--amber2);letter-spacing:.3px
+}
+.lp-title svg{width:14px;height:14px;stroke:var(--amber2);fill:none;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lp-actions{display:flex;gap:6px}
+.lp-btn{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 10px;border-radius:8px;border:none;cursor:pointer;
+  font-size:11px;font-weight:600;transition:all .18s ease
+}
+.lp-btn-copy{background:rgba(124,58,237,.1);color:var(--p)}
+.lp-btn-copy:active{background:rgba(124,58,237,.18)}
+.lp-btn-clear{background:rgba(239,68,68,.08);color:var(--red)}
+.lp-btn-clear:active{background:rgba(239,68,68,.15)}
+.lp-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.lp-body{
+  overflow-y:auto;max-height:200px;padding:8px 14px 12px
+}
+.lp-body::-webkit-scrollbar{display:none}
+
+.lp-empty{
+  text-align:center;padding:20px;
+  color:var(--muted);font-size:12px
+}
+
+.rule-entry{
+  display:flex;align-items:flex-start;gap:8px;
+  padding:9px 10px;border-radius:10px;
+  background:rgba(245,158,11,.05);
+  border:1px solid rgba(245,158,11,.12);
+  margin-bottom:7px;position:relative;
+  animation:ruleIn .35s cubic-bezier(.34,1.56,.64,1) both
+}
+@keyframes ruleIn{
+  from{opacity:0;transform:translateX(12px)}
+  to{opacity:1;transform:translateX(0)}
+}
+.re-index{
+  font-size:10px;font-weight:800;color:var(--amber2);
+  background:rgba(245,158,11,.15);border-radius:5px;
+  padding:1px 5px;flex-shrink:0;margin-top:1px
+}
+.re-body{flex:1;min-width:0}
+.re-cond{
+  font-size:12px;font-weight:600;color:var(--text);
+  direction:rtl;line-height:1.4
+}
+.re-arrow{color:var(--p);font-weight:700;margin:0 4px}
+.re-cons{font-size:12px;color:var(--text2);direction:rtl;line-height:1.4}
+.re-meta{
+  display:flex;align-items:center;gap:8px;margin-top:4px
+}
+.re-conf{
+  font-size:10px;color:var(--muted);display:flex;align-items:center;gap:3px
+}
+.conf-bar{
+  width:36px;height:3px;border-radius:2px;
+  background:rgba(0,0,0,.08);overflow:hidden
+}
+.conf-fill{
+  height:100%;border-radius:2px;
+  background:linear-gradient(90deg,var(--teal),var(--p));
+  transition:width .5s ease
+}
+.re-time{font-size:9.5px;color:var(--muted)}
+.re-copy{
+  flex-shrink:0;width:26px;height:26px;border-radius:7px;
+  border:none;background:rgba(124,58,237,.08);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s ease
+}
+.re-copy:active{background:rgba(124,58,237,.18)}
+.re-copy svg{width:12px;height:12px;stroke:var(--p);fill:none;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ─── INPUT AREA ─────────────────────────────────────── */
+#input-area{
+  position:relative;z-index:100;
+  padding:10px 14px;
+  padding-bottom:calc(10px + var(--safe));
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(24px) saturate(1.8);
+  -webkit-backdrop-filter:blur(24px) saturate(1.8);
+  border-top:1px solid rgba(255,255,255,.55);
+  box-shadow:0 -1px 0 rgba(0,0,0,.04),0 -6px 20px rgba(0,0,0,.05);
+  display:flex;align-items:center;gap:9px
+}
+
+/* Mode indicator strip */
+#mode-strip{
+  position:absolute;top:0;left:0;right:0;height:2px;
+  transition:background .4s ease
+}
+#mode-strip.learn{background:linear-gradient(90deg,transparent,rgba(245,158,11,.6) 30%,rgba(245,158,11,.6) 70%,transparent)}
+#mode-strip.use{background:linear-gradient(90deg,transparent,rgba(124,58,237,.5) 30%,rgba(124,58,237,.5) 70%,transparent)}
+
+#input-wrap{
+  flex:1;position:relative;
+  background:rgba(244,245,250,.9);
+  border:1.5px solid rgba(0,0,0,.07);
+  border-radius:22px;overflow:hidden;
+  transition:border-color .2s,box-shadow .2s
+}
+#input-wrap:focus-within{
+  border-color:rgba(124,58,237,.32);
+  box-shadow:0 0 0 3px rgba(124,58,237,.07)
+}
+#input-wrap.learn-mode{
+  border-color:rgba(245,158,11,.25)
+}
+#input-wrap.learn-mode:focus-within{
+  border-color:rgba(245,158,11,.45);
+  box-shadow:0 0 0 3px rgba(245,158,11,.07)
+}
+
+#msg-input{
+  width:100%;padding:12px 16px;
+  background:transparent;border:none;outline:none;
+  font-size:15px;font-family:'Inter',-apple-system,sans-serif;
+  color:var(--text);direction:rtl;text-align:right;
+  resize:none;line-height:1.42;
+  max-height:110px;min-height:46px;overflow-y:auto
+}
+#msg-input::placeholder{color:var(--muted)}
+#msg-input::-webkit-scrollbar{display:none}
+
+#send-btn{
+  width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--p),var(--p2));
+  box-shadow:0 4px 16px rgba(124,58,237,.38);
+  transition:all .22s cubic-bezier(.34,1.56,.64,1);
+  position:relative;overflow:hidden
+}
+#send-btn.learn-send{
+  background:linear-gradient(135deg,var(--amber),var(--amber2));
+  box-shadow:0 4px 16px rgba(245,158,11,.38)
+}
+#send-btn:active{transform:scale(.91)}
+#send-btn.sending{animation:sPulse .8s ease-in-out infinite}
+@keyframes sPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+
+.sicon,.sloading{
+  position:absolute;
+  transition:all .24s cubic-bezier(.34,1.56,.64,1)
+}
+.sicon svg{
+  width:19px;height:19px;fill:none;stroke:#fff;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round
+}
+.sloading{opacity:0;transform:scale(.5)}
+.spinner{
+  width:19px;height:19px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;
+  animation:spin .7s linear infinite
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+#send-btn.sending .sicon{opacity:0;transform:scale(0) rotate(90deg)}
+#send-btn.sending .sloading{opacity:1;transform:scale(1)}
+
+/* ─── TOAST ──────────────────────────────────────────── */
+#toast{
+  position:absolute;top:calc(var(--hh) + 10px);left:50%;
+  transform:translateX(-50%) translateY(-18px);
+  background:rgba(25,25,35,.92);color:#fff;
+  padding:9px 18px;border-radius:50px;
+  font-size:12.5px;font-weight:500;white-space:nowrap;
+  z-index:300;opacity:0;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;
+  backdrop-filter:blur(14px)
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ─── EMPTY STATE ────────────────────────────────────── */
+#empty-state{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;flex:1;gap:11px;
+  padding:40px 24px;text-align:center;
+  animation:fadeUp .6s ease both
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.es-ring{
+  width:76px;height:76px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(124,58,237,.1),rgba(10,189,182,.08));
+  border:1.5px solid rgba(124,58,237,.14);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 30px rgba(124,58,237,.1);
+  animation:esFloat 3s ease-in-out infinite;position:relative
+}
+.es-ring::before{
+  content:'';position:absolute;inset:-8px;border-radius:50%;
+  border:1px solid rgba(124,58,237,.08);
+  animation:ringP 3.5s ease-out infinite
+}
+.es-ring::after{
+  content:'';position:absolute;inset:-16px;border-radius:50%;
+  border:1px solid rgba(124,58,237,.05);
+  animation:ringP 3.5s ease-out infinite .9s
+}
+.es-ring svg{
+  width:32px;height:32px;stroke:var(--p);fill:none;
+  stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:.7
+}
+@keyframes esFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.es-title{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.es-sub{font-size:13.5px;color:var(--text2);line-height:1.5;max-width:230px}
+
+/* ─── MISC ───────────────────────────────────────────── */
+::selection{background:rgba(124,58,237,.18)}
+@media(max-height:580px){:root{--hh:58px}.h-title{font-size:18px}}
+</style>
+</head>
+
+<body>
+<div id="app">
+
+<!-- BACKGROUND -->
+<div class="core-bg">
+  <div class="orb o1"></div><div class="orb o2"></div>
+  <div class="orb o3"></div><div class="orb o4"></div>
+  <div class="cring cr1"></div><div class="cring cr2"></div><div class="cring cr3"></div>
+</div>
+
+<!-- ═══ HEADER ═══════════════════════════════════════ -->
+<header id="header">
+  <div class="h-left">
+    <!-- Core button -->
+    <button class="btn-core" onclick="UI.showToast('Core 01 — פעיל')">
+      <div class="core-badge">
+        <!-- Neural/Core SVG icon -->
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+          <path d="M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M17.66 6.34l-2.12 2.12M6.34 17.66l-2.12 2.12"/>
+        </svg>
+      </div>
+      <span class="btn-core-label">Core</span>
+    </button>
+  </div>
+
+  <div class="h-center">
+    <div class="h-title">LITUM</div>
+    <div class="h-status">
+      <div class="sdot"></div>
+      <span class="stext">מחובר ומאובטח</span>
+      <!-- Shield icon -->
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="h-right">
+    <!-- Mode toggle -->
+    <div class="mode-toggle">
+      <button class="mtab" id="tab-learn" onclick="UI.setMode('learn')">למידה</button>
+      <button class="mtab active-use" id="tab-use" onclick="UI.setMode('use')">שימוש</button>
+    </div>
+    <!-- Menu -->
+    <button class="ibtn" id="menu-toggle" onclick="UI.toggleMenu()" aria-label="תפריט">
+      <svg id="menu-icon" viewBox="0 0 24 24">
+        <line x1="3" y1="6"  x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="17" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="h-bar"></div>
+</header>
+
+<!-- ═══ SLIDE MENU ════════════════════════════════════ -->
+<nav id="slide-menu" aria-hidden="true">
+  <ul class="mlist">
+    <li class="mitem" onclick="UI.menuAction('memory')">
+      <div class="micon" style="background:rgba(56,189,248,.1);color:#0284C7">
+        <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      </div>
+      <div><div class="mtxt">זיכרון מערכת</div><div class="msub">קצר וארוך טווח</div></div>
+    </li>
+    <li class="mitem" onclick="UI.menuAction('rules')">
+      <div class="micon" style="background:rgba(10,189,182,.1);color:#0F766E">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+      </div>
+      <div><div class="mtxt">חוקים שנלמדו</div><div class="msub">כל חוקי ה-IF→THEN</div></div>
+    </li>
+    <li class="mitem" onclick="UI.menuAction('export')">
+      <div class="micon" style="background:rgba(124,58,237,.1);color:var(--p)">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </div>
+      <div><div class="mtxt">ייצוא נתונים</div><div class="msub">JSON מלא לייצוא</div></div>
+    </li>
+    <div class="mdiv"></div>
+    <li class="mitem" onclick="UI.menuAction('clear')">
+      <div class="micon" style="background:rgba(239,68,68,.08);color:var(--red)">
+        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      </div>
+      <div><div class="mtxt" style="color:var(--red)">נקה שיחה</div><div class="msub">מחיקת הודעות הסשן</div></div>
+    </li>
+  </ul>
+</nav>
+
+<!-- ═══ CONTENT ══════════════════════════════════════ -->
+<div id="content">
+
+  <!-- Chat -->
+  <div id="chat-area" role="log" aria-label="שיחה עם LITUM">
+    <div id="empty-state">
+      <div class="es-ring">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+          <path d="M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M17.66 6.34l-2.12 2.12M6.34 17.66l-2.12 2.12"/>
+        </svg>
+      </div>
+      <div class="es-title">LITUM מוכן</div>
+      <div class="es-sub" id="es-sub">מצב שימוש פעיל. כתוב הודעה כדי להתחיל.</div>
+    </div>
+  </div>
+
+  <!-- Learn Panel -->
+  <div id="learn-panel" aria-label="פאנל למידה">
+    <div class="lp-header">
+      <div class="lp-title">
+        <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        פאנל למידה — חוקים שנרשמו
+      </div>
+      <div class="lp-actions">
+        <button class="lp-btn lp-btn-copy" onclick="UI.copyAllRules()">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          העתק הכל
+        </button>
+        <button class="lp-btn lp-btn-clear" onclick="UI.clearRules()">
+          <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          נקה
+        </button>
+      </div>
+    </div>
+    <div class="lp-body" id="lp-body">
+      <div class="lp-empty" id="lp-empty">טרם נרשמו חוקים בסשן זה. הרץ משפט כגון:<br>"אם המשתמש אומר היי אז החזר היי"</div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- ═══ INPUT AREA ════════════════════════════════════ -->
+<footer id="input-area">
+  <div id="mode-strip" class="use"></div>
+  <div id="input-wrap">
+    <textarea id="msg-input" rows="1" placeholder="כתוב הודעה..."
+      autocomplete="off" autocorrect="on" spellcheck="true" aria-label="הזנת הודעה"></textarea>
+  </div>
+  <button id="send-btn" aria-label="שלח" onclick="UI.sendMessage()">
+    <span class="sicon">
+      <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </span>
+    <span class="sloading"><div class="spinner"></div></span>
+  </button>
+</footer>
+
+<div id="toast" role="alert" aria-live="polite"></div>
+
+</div><!-- /app -->
+
+<!-- ═══ CORE ENGINE ════════════════════════════════════ -->
+<script src="core01.js"></script>
+
+<!-- ═══ UI CONTROLLER ═════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ── Particles ─────────────────────────────────────── */
+(function(){
+  const bg = document.querySelector('.core-bg');
+  const cols = ['#7C3AED','#0ABDB6','#38BDF8','#F59E0B','#22C55E'];
+  for(let i=0;i<16;i++){
+    const el = document.createElement('div');
+    el.className = 'part';
+    el.style.cssText = `left:${Math.random()*100}%;top:${35+Math.random()*55}%;
+      background:${cols[Math.floor(Math.random()*cols.length)]};
+      animation-duration:${9+Math.random()*11}s;
+      animation-delay:${-Math.random()*12}s;
+      width:${2+Math.random()*2.5}px;height:${2+Math.random()*2.5}px`;
+    bg.appendChild(el);
+  }
+})();
+
+/* ── Helpers ────────────────────────────────────────── */
+const fmt = d => d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
+const fmtDate = d => {
+  const t=new Date(),y=new Date(t);y.setDate(t.getDate()-1);
+  if(d.toDateString()===t.toDateString()) return 'היום';
+  if(d.toDateString()===y.toDateString()) return 'אמש';
+  return d.toLocaleDateString('he-IL');
+};
+
+/* ── UI Controller ──────────────────────────────────── */
+const UI = (() => {
+  const chatEl   = document.getElementById('chat-area');
+  const inputEl  = document.getElementById('msg-input');
+  const sendBtn  = document.getElementById('send-btn');
+  const menuEl   = document.getElementById('slide-menu');
+  const menuIcon = document.getElementById('menu-icon');
+  const menuTogBtn = document.getElementById('menu-toggle');
+  const toastEl  = document.getElementById('toast');
+  const emptyEl  = document.getElementById('empty-state');
+  const esSub    = document.getElementById('es-sub');
+  const lpanel   = document.getElementById('learn-panel');
+  const lpBody   = document.getElementById('lp-body');
+  const lpEmpty  = document.getElementById('lp-empty');
+  const strip    = document.getElementById('mode-strip');
+  const inputWrap= document.getElementById('input-wrap');
+  const tabLearn = document.getElementById('tab-learn');
+  const tabUse   = document.getElementById('tab-use');
+
+  let isSending  = false;
+  let menuOpen   = false;
+  let lastDate   = null;
+  let ruleCount  = 0;
+  let mode       = 'use'; // 'learn' | 'use'
+
+  /* ── Auto-resize ── */
+  inputEl.addEventListener('input',()=>{
+    inputEl.style.height='auto';
+    inputEl.style.height=Math.min(inputEl.scrollHeight,110)+'px';
+  });
+
+  inputEl.addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}
+  });
+
+  document.addEventListener('click',e=>{
+    if(menuOpen&&!menuEl.contains(e.target)&&!menuTogBtn.contains(e.target)) closeMenu();
+  });
+  chatEl.addEventListener('scroll',closeMenu);
+
+  /* ── Toast ── */
+  let toastTimer;
+  function showToast(msg,dur=2400){
+    clearTimeout(toastTimer);
+    toastEl.textContent=msg;
+    toastEl.classList.add('show');
+    toastTimer=setTimeout(()=>toastEl.classList.remove('show'),dur);
+  }
+
+  /* ── Menu ── */
+  function toggleMenu(){menuOpen?closeMenu():openMenu();}
+  function openMenu(){
+    menuOpen=true;menuEl.classList.add('open');
+    menuEl.setAttribute('aria-hidden','false');
+    // Animate to X
+    menuIcon.innerHTML=`<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>`;
+  }
+  function closeMenu(){
+    menuOpen=false;menuEl.classList.remove('open');
+    menuEl.setAttribute('aria-hidden','true');
+    menuIcon.innerHTML=`<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="17" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>`;
+  }
+
+  /* ── Mode ── */
+  function setMode(m){
+    mode = m;
+    // Tabs
+    tabLearn.classList.remove('active-learn','active-use');
+    tabUse.classList.remove('active-learn','active-use');
+    if(m==='learn'){
+      tabLearn.classList.add('active-learn');
+      lpanel.classList.add('open');
+      strip.className='learn';
+      inputWrap.classList.add('learn-mode');
+      sendBtn.classList.add('learn-send');
+      inputEl.placeholder='לַמֵּד: "אם ... אז ..."';
+      if(esSub) esSub.textContent='מצב למידה פעיל. כתוב חוק: "אם ... אז ..."';
+    } else {
+      tabUse.classList.add('active-use');
+      lpanel.classList.remove('open');
+      strip.className='use';
+      inputWrap.classList.remove('learn-mode');
+      sendBtn.classList.remove('learn-send');
+      inputEl.placeholder='כתוב הודעה...';
+      if(esSub) esSub.textContent='מצב שימוש פעיל. כתוב הודעה כדי להתחיל.';
+    }
+    showToast(m==='learn'?'מצב למידה — Admin פעיל':'מצב שימוש פעיל');
+  }
+
+  /* ── Date separator ── */
+  function maybeDate(d){
+    const s=fmtDate(d);
+    if(s===lastDate) return;
+    lastDate=s;
+    const el=document.createElement('div');
+    el.className='date-sep';
+    el.innerHTML=`<span>${s}</span>`;
+    chatEl.appendChild(el);
+  }
+
+  /* ── Avatar HTML ── */
+  const aiAvatarHTML = `
+    <div class="mavatar">
+      <img src="socen.jpg" alt="LITUM"
+        onerror="this.outerHTML='<svg viewBox=\\'0 0 24 24\\'><circle cx=\\'12\\' cy=\\'12\\' r=\\'3\\'/><path d=\\'M12 2v3M12 19v3M2 12h3M19 12h3\\'/></svg>'"/>
+    </div>`;
+  const userAvatarHTML = `
+    <div class="mavatar" style="background:linear-gradient(135deg,#7C3AED,#5B21B6)">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+      </svg>
+    </div>`;
+
+  /* ── Create bubble ── */
+  function makeBubble({role,text,time,extra,isLearnConfirm}){
+    const row = document.createElement('div');
+    row.className = `mrow ${role}${isLearnConfirm?' learn-confirm':''}`;
+
+    const av = document.createElement('div');
+    av.innerHTML = role==='user'? userAvatarHTML : aiAvatarHTML;
+
+    const bub = document.createElement('div');
+    bub.className = 'bubble';
+
+    const txt = document.createElement('div');
+    txt.className = 'btext';
+    txt.textContent = text;
+
+    const timeEl = document.createElement('div');
+    timeEl.className = 'btime';
+
+    let timeInner = `<span class="tdot"></span><span>${time}</span>`;
+    if(role==='user'){
+      timeInner += `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+    }
+    timeEl.innerHTML = timeInner;
+
+    bub.appendChild(txt);
+
+    if(isLearnConfirm && extra){
+      const tag = document.createElement('div');
+      tag.className = 'rule-tag';
+      tag.innerHTML = `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> חוק נרשם`;
+      bub.appendChild(tag);
+    }
+    bub.appendChild(timeEl);
+
+    row.appendChild(av.firstElementChild);
+    row.appendChild(bub);
+    return row;
+  }
+
+  /* ── Thinking ── */
+  function showThinking(){
+    const row=document.createElement('div');
+    row.className='thinking-row';
+    row.id='thinking-ind';
+    const av=document.createElement('div');
+    av.innerHTML=aiAvatarHTML;
+    const bub=document.createElement('div');
+    bub.className='thinking-bub';
+    bub.innerHTML='<div class="tdot-ani"></div><div class="tdot-ani"></div><div class="tdot-ani"></div>';
+    row.appendChild(av.firstElementChild);
+    row.appendChild(bub);
+    chatEl.appendChild(row);
+    scrollBot();
+    return row;
+  }
+  function removeThinking(){
+    const el=document.getElementById('thinking-ind');
+    if(el) el.remove();
+  }
+
+  /* ── Scroll ── */
+  function scrollBot(){
+    setTimeout(()=>chatEl.scrollTo({top:chatEl.scrollHeight,behavior:'smooth'}),30);
+  }
+
+  /* ── Add rule to learn panel ── */
+  function addRuleToPanel(rule){
+    if(!rule) return;
+    ruleCount++;
+    if(lpEmpty) lpEmpty.remove();
+    const entry=document.createElement('div');
+    entry.className='rule-entry';
+    const confPct=Math.round(rule.confidence*100);
+    const timeStr=fmt(new Date(rule.createdAt));
+    const ruleCode=`IF(${rule.condition}) => ${rule.consequence}`;
+    entry.dataset.code=ruleCode;
+    entry.innerHTML=`
+      <div class="re-index">#${ruleCount}</div>
+      <div class="re-body">
+        <div class="re-cond">אם: <strong>${rule.condition}</strong></div>
+        <div class="re-cons">אז:<span class="re-arrow">›</span>${rule.consequence}</div>
+        <div class="re-meta">
+          <div class="re-conf">
+            <div class="conf-bar"><div class="conf-fill" style="width:${confPct}%"></div></div>
+            ${confPct}%
+          </div>
+          <div class="re-time">${timeStr}</div>
+        </div>
+      </div>
+      <button class="re-copy" onclick="UI.copyRule(this)" title="העתק חוק">
+        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>`;
+    lpBody.appendChild(entry);
+    lpBody.scrollTo({top:lpBody.scrollHeight,behavior:'smooth'});
+  }
+
+  /* ── Copy single rule ── */
+  function copyRule(btn){
+    const entry=btn.closest('.rule-entry');
+    const code=entry.dataset.code;
+    navigator.clipboard.writeText(code).then(()=>showToast('חוק הועתק'));
+  }
+
+  /* ── Copy all rules ── */
+  function copyAllRules(){
+    if(typeof LITUM_CORE==='undefined'){showToast('core01.js לא נטען');return;}
+    const rules=LITUM_CORE.modules.RuleStore.getAll();
+    if(!rules.length){showToast('אין חוקים לייצוא');return;}
+    const lines=[
+      '// LITUM AI — Rules Export',
+      `// ${new Date().toLocaleString('he-IL')}`,
+      '',
+      ...rules.map((r,i)=>`// Rule ${i+1}\nIF(${r.condition}) => ${r.consequence} [confidence:${Math.round(r.confidence*100)}%]`)
+    ];
+    navigator.clipboard.writeText(lines.join('\n')).then(()=>showToast(`${rules.length} חוקים הועתקו`));
+  }
+
+  /* ── Clear rules panel ── */
+  function clearRules(){
+    if(typeof LITUM_CORE!=='undefined') LITUM_CORE.modules.RuleStore.clear();
+    lpBody.innerHTML='<div class="lp-empty" id="lp-empty">טרם נרשמו חוקים בסשן זה. הרץ משפט כגון:<br>"אם המשתמש אומר היי אז החזר היי"</div>';
+    ruleCount=0;
+    showToast('חוקים נמחקו');
+  }
+
+  /* ── Generate AI response ── */
+  function genResponse(analysis,isLearn){
+    const {intent,tense,ruleExtraction,matchedRule,confidence,confidenceLabel}=analysis;
+
+    if(isLearn){
+      if(ruleExtraction&&ruleExtraction.isRule){
+        return `הבנתי. רושם חוק:\nאם "${ruleExtraction.condition}" — אז "${ruleExtraction.consequence}"\nרמת אמינות: ${Math.round(confidence*100)}%`;
+      }
+      return 'מצב למידה: המשפט לא זוהה כחוק IF→THEN. נסה: "אם ... אז ..."';
+    }
+
+    if(ruleExtraction&&ruleExtraction.isRule){
+      return `זיהיתי חוק:\nאם "${ruleExtraction.condition}" — אז "${ruleExtraction.consequence}"\nביטחון: ${Math.round(confidence*100)}%`;
+    }
+    if(matchedRule){
+      return `על פי החוקים שלמדתי:\n${matchedRule.consequence}`;
+    }
+
+    const map={
+      greet:'שלום. ליבת הלמידה פעילה. מה נלמד?',
+      farewell:'להתראות. הידע שנלמד שמור.',
+      ask:'שאלה מזוהה. מחפש בזיכרון...',
+      define:'מאחסן הגדרה בזיכרון ארוך-טווח.',
+      teach:'מבין. שומר ברמת אמינות ראשונית.',
+      confirm:'חיזוק חיובי נרשם.',
+      correct:'מקבל תיקון. מעדכן.',
+      request:'מחפש בחוקים הקיימים...',
+      condition:'זוהה תנאי. מנסה לחלץ חוק.',
+      learn:'מוכן ללמוד. שתף ידע.',
+      unknown:`מעבד. ביטחון: ${confidenceLabel}`
+    };
+    let r=map[intent]||map.unknown;
+    const tm={past:'(עבר)',present:'(הווה)',future:'(עתיד)'};
+    if(tense&&tm[tense]) r+='\n'+tm[tense];
+    return r;
+  }
+
+  /* ── SEND ── */
+  async function sendMessage(){
+    const text=inputEl.value.trim();
+    if(!text||isSending) return;
+    isSending=true;
+
+    if(emptyEl) emptyEl.remove();
+
+    const raw=inputEl.value.trim();
+    inputEl.value='';inputEl.style.height='auto';
+
+    sendBtn.classList.add('sending');
+
+    const now=new Date();
+    maybeDate(now);
+
+    // User bubble
+    const userRow=makeBubble({role:'user',text:raw,time:fmt(now)});
+    chatEl.appendChild(userRow);
+    scrollBot();
+
+    showThinking();
+
+    let analysis=null,resp='',newRule=null;
+    await new Promise(r=>setTimeout(r,800+Math.random()*600));
+
+    try{
+      if(typeof LITUM_CORE!=='undefined'){
+        analysis=LITUM_CORE.analyze(raw,{speaker:mode==='learn'?'ADMIN':'USER'});
+        resp=genResponse(analysis,mode==='learn');
+        if(analysis.newRule) newRule=analysis.newRule;
+      } else {
+        resp='core01.js לא נטען.';
+      }
+    } catch(e){resp=`שגיאה: ${e.message}`;}
+
+    removeThinking();
+
+    const isLearnConfirm = mode==='learn'&&newRule;
+    const aiRow=makeBubble({
+      role:'ai',text:resp,
+      time:fmt(new Date()),
+      isLearnConfirm
+    });
+    chatEl.appendChild(aiRow);
+
+    // If learn mode & rule found — add to panel
+    if(mode==='learn'&&newRule){
+      addRuleToPanel(newRule);
+    }
+
+    scrollBot();
+    sendBtn.classList.remove('sending');
+    isSending=false;
+    inputEl.focus();
+  }
+
+  /* ── Menu actions ── */
+  function menuAction(action){
+    closeMenu();
+    setTimeout(()=>{
+      if(action==='memory'){
+        const stm=typeof LITUM_CORE!=='undefined'?LITUM_CORE.modules.ShortTermMemory.size():0;
+        const ltm=typeof LITUM_CORE!=='undefined'?LITUM_CORE.modules.LongTermMemory.size():0;
+        const rules=typeof LITUM_CORE!=='undefined'?LITUM_CORE.modules.RuleStore.getAll().length:0;
+        showToast(`זיכרון: ${stm} קצר | ${ltm} ארוך | ${rules} חוקים`,3200);
+      }
+      if(action==='rules'){
+        if(typeof LITUM_CORE==='undefined'){showToast('core01.js לא נטען');return;}
+        const rules=LITUM_CORE.modules.RuleStore.getAll();
+        showToast(rules.length?`${rules.length} חוקים קיימים`:'אין חוקים שמורים',2800);
+        if(!lpanel.classList.contains('open')) setMode('learn');
+      }
+      if(action==='export'){
+        if(typeof LITUM_CORE==='undefined'){showToast('core01.js לא נטען');return;}
+        const json=LITUM_CORE.export.full();
+        const b=new Blob([json],{type:'application/json'});
+        const url=URL.createObjectURL(b);
+        const a=document.createElement('a');
+        a.href=url;a.download='litum_export.json';a.click();
+        URL.revokeObjectURL(url);
+        showToast('ייצוא הושלם');
+      }
+      if(action==='clear'){
+        chatEl.querySelectorAll('.mrow,.date-sep').forEach(el=>{
+          el.style.transition='opacity .25s ease';el.style.opacity='0';
+          setTimeout(()=>el.remove(),250);
+        });
+        if(typeof LITUM_CORE!=='undefined') LITUM_CORE.modules.ShortTermMemory.clear();
+        lastDate=null;
+        setTimeout(()=>{
+          if(!chatEl.querySelector('#empty-state')){
+            const es=document.createElement('div');
+            es.id='empty-state';es.className='';
+            es.style.cssText='display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:11px;padding:40px 24px;text-align:center;animation:fadeUp .5s ease both';
+            es.innerHTML=`
+              <div class="es-ring">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#7C3AED" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+                  <path d="M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M17.66 6.34l-2.12 2.12M6.34 17.66l-2.12 2.12"/>
+                </svg>
+              </div>
+              <div class="es-title">LITUM מוכן</div>
+              <div class="es-sub">${mode==='learn'?'מצב למידה. כתוב חוק: "אם ... אז ..."':'מצב שימוש פעיל.'}</div>`;
+            chatEl.appendChild(es);
+          }
+          showToast('השיחה נמחקה');
+        },320);
+      }
+    },110);
+  }
+
+  /* ── Boot ── */
+  window.addEventListener('load',()=>{
+    setTimeout(()=>{
+      if(typeof LITUM_CORE!=='undefined'){
+        const el=document.getElementById('empty-state');
+        if(el) el.remove();
+        maybeDate(new Date());
+        const row=makeBubble({
+          role:'ai',
+          text:'שלום. מצב שימוש פעיל. ניתן לעבור למצב למידה דרך הכפתורים למעלה.',
+          time:fmt(new Date())
+        });
+        chatEl.appendChild(row);
+        chatEl.scrollTo({top:chatEl.scrollHeight});
+      }
+    },500);
+    if(window.innerWidth>480) inputEl.focus();
+  });
+
+  /* ── Public ── */
+  return{sendMessage,toggleMenu,menuAction,setMode,copyRule,copyAllRules,clearRules,showToast};
+})();
+</script>
+</body>
+</html>
